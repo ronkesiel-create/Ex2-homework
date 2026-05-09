@@ -4,48 +4,53 @@ import java.util.Scanner;
 public class Question1 {
 
     /**
-     * this function returns the biggest value within the columns by doing:
-     * 1.
-     * @param matrix the given 2d array
-     * @return the biggest value within the columns, 0 or the first value if
+     * This function is for finding the Saddle Points within a 2D array
+     * The function uses the first 1st loop to determine "rowMin" of each collum
+     * Then it uses the second 2nd loop to see if "rowMin" ("saddlePoint") is the Maximum within its collum
+     * If so it prints the position of The "saddlePoint" within the array and its value
+     * @param matrix the given array
+     * @throws EmptyStackException if given array is empty
      */
-    public static int findMax(int[][] matrix) {
-        if(matrix.length == 0 || matrix[0].length == 0){
-           throw new IllegalArgumentException("cant find the maximum size in an empty array");
-        }
-        // a case for a single digit array
-        if(matrix.length == 1 && matrix[0].length == 1){
-            return matrix[0][0];
-        }
-
-       int max = 0;
-       for (int i = 0; i < matrix.length-1; i++) {
-           max = Math.max(matrix[])
-       }
-       return max;
-    }
-
-    public static int findMin(int[][] matrix) {
-
-        int max = Math.min(matrix[0][0], matrix[1][0]);
-        for (int i = 0; i < matrix.length; i++) {
-            if (matrix[i][0] > max) {
-                max = matrix[i][0];
-            }
-        }
-        return max;
-    }
-
     public static void findSaddlePoints(int[][] matrix) {
+
+        if (matrix.length == 0) {
+            throw new EmptyStackException();
+        }
         int rows = matrix.length;
         int cols = matrix[0].length;
-        int minRow = Integer.MAX_VALUE;
-        int maxCol = Integer.MIN_VALUE;
+        boolean found = false;
+        int rowMin = matrix[0].length;
+        int rowIndex = 0;
+        int colIndex = 0;
+        int saddlePoint = 0;
+        // STEP 1: Loop through each row
         for (int i = 0; i < rows; i++) {
-            if (matrix[i][0] < minRow) {
-                minRow = matrix[i][0];
+            // STEP 2: Find the minimum in the current row
+            rowMin =  matrix[i][0];
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] < rowMin) {
+                    rowMin = matrix[i][j];
+                    rowIndex = i;
+                    colIndex= j;
+                }
+            }
+            //its rowMin but I made "saddlePoint" just for convenience
+            saddlePoint = matrix[rowIndex][colIndex];
+            //STEP 3: find the maximum within a collum
+            found = true;
+            for (int k = 0; k < rows; k++) {
+                if (matrix[k][colIndex] > saddlePoint) {
+                    found = false; // Someone in the column is bigger
+                }
+            }
+            if (found) {
+                System.out.println("Saddle Point found at [" + i + "][" + colIndex + "]: " + rowMin);
+            }
+            else {
+                System.out.println("No saddle point was found in this row.");
             }
         }
+
     }
 
     public static void main(String[] args) {
@@ -59,6 +64,14 @@ public class Question1 {
             for (int j = 0; j < array[i].length; j++) {
                 System.out.println("please enter a number in row " + (i+1) + " within column " + (j+1) + " ");
                 array[i][j] = input.nextInt();
+            }
+        }
+        int colIndex =0;
+        int rowIndex =0;
+        int[][] saddleArray = new int[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                saddleArray[i][j] = 0;
             }
         }
         findSaddlePoints(array);
