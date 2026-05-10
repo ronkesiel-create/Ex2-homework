@@ -12,9 +12,11 @@ public class Question2 {
      * @return nothing if nothing was given. Otherwise, the non-duplicate version of given string("compressedString")
      */
     public static String compressString(String str){
-        // creates an array char from the size of the array
+        // creates a "StringBuilder" for building the new string
         StringBuilder compressedString = new StringBuilder();
+        // creates an array char from the size of the array
         char[] charArray = str.toCharArray();
+        // Catches the case for empty string
         if (charArray.length == 0){
             return str;
         }
