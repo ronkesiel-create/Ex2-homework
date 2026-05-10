@@ -13,13 +13,13 @@ public class Question1 {
      */
     public static void findSaddlePoints(int[][] matrix) {
 
-        if (matrix.length == 0) {
-            throw new EmptyStackException();
+        if (matrix.length == 0||matrix[0].length == 0) {
+            throw new IllegalArgumentException("The matrix is empty");
         }
         int rows = matrix.length;
         int cols = matrix[0].length;
         boolean found = false;
-        int rowMin = matrix[0].length;
+        int rowMin = Integer.MAX_VALUE;
         int rowIndex = 0;
         int colIndex = 0;
         int saddlePoint = 0;
@@ -30,24 +30,29 @@ public class Question1 {
             for (int j = 0; j < cols; j++) {
                 if (matrix[i][j] < rowMin) {
                     rowMin = matrix[i][j];
+                }
+            }
+            for (int j = 0; j < cols; j++) {
+                //STEP 3. Iterates over the elements of the row, goes for "STEP 4" for each value equal to "rowMin"
+                if (matrix[i][j] == rowMin) {
                     rowIndex = i;
-                    colIndex= j;
+                    colIndex = j;
+                    //It's rowMin, but I made "saddlePoint" just for convenience
+                    saddlePoint = matrix[rowIndex][colIndex];
+                    //STEP 4: check if the current "saddlePoint" is the maximum within its column
+                    found = true;
+                    for (int k = 0; k < rows; k++) {
+                        if (matrix[k][colIndex] > saddlePoint) {
+                            found = false; // Someone in the column is bigger
+                            break;
+                        }
+                    }
+
+                    if (found) {
+                        System.out.println("Saddle Point found at [" + i + "][" + colIndex + "]: " + rowMin);
+                    }
+
                 }
-            }
-            //its rowMin but I made "saddlePoint" just for convenience
-            saddlePoint = matrix[rowIndex][colIndex];
-            //STEP 3: find the maximum within a collum
-            found = true;
-            for (int k = 0; k < rows; k++) {
-                if (matrix[k][colIndex] > saddlePoint) {
-                    found = false; // Someone in the column is bigger
-                }
-            }
-            if (found) {
-                System.out.println("Saddle Point found at [" + i + "][" + colIndex + "]: " + rowMin);
-            }
-            else {
-                System.out.println("No saddle point was found in this row.");
             }
         }
 
